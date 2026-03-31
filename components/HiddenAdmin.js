@@ -8,68 +8,81 @@ export default function HiddenAdmin() {
   const [message, setMessage] = useState('');
   const [status, setStatus] = useState('');
 
-  // Handle the password guess
+  // 1. Check the password
   const checkPassword = () => {
     if (password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
       setStep('unlocked');
-      setIsPanelOpen(true); // Pop open the panel immediately upon unlocking
+      setIsPanelOpen(true);
     } else {
-      window.location.reload(); // Wrong password? Insta-refresh.
+      window.location.reload(); // Insta-refresh on wrong guess
     }
   };
 
-  // Send the actual message
+  // 2. Send the message to the API
   const sendMessage = async () => {
     setStatus('Sending...');
-    const response = await fetch('/api/send-message', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        text: message, 
-        secretPassword: password // Send the password to backend for security
-      }),
-    });
+    try {
+      const response = await fetch('/api/send-message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          text: message, 
+          secretPassword: password 
+        }),
+      });
 
-    if (response.ok) {
-      setStatus('✅ Sent!');
-      setTimeout(() => {
-        // Hide the panel after sending, but keep the toggle button visible
-        setIsPanelOpen(false);
-        setMessage('');
-        setStatus('');
-      }, 2000);
-    } else {
-      setStatus('❌ Failed to send.');
+      if (response.ok) {
+        setStatus('✅ Broadcast sent!');
+        setTimeout(() => {
+          setIsPanelOpen(false); // Close panel but keep the unlocked toggle
+          setMessage('');
+          setStatus('');
+        }, 2000);
+      } else {
+        setStatus('❌ Failed. Check your Vercel logs.');
+      }
+    } catch (error) {
+      setStatus('❌ Network error.');
     }
   };
 
   return (
     <>
-      {/* 1. THE INVISIBLE TRIGGER BUTTON */}
+      {/* --- THE SUBTLE LOCK ICON --- */}
       {step === 'idle' && (
-        <div 
+        <button 
           onClick={() => setStep('prompt')}
           style={{
             position: 'fixed',
-            bottom: 0,
-            right: 0, // Change to 'left: 0' if you prefer bottom-left
-            width: '50px',
-            height: '50px',
-            cursor: 'default', // Keeps the mouse from turning into a pointer so no one suspects it
-            zIndex: 9999,
-            // backgroundColor: 'rgba(255, 0, 0, 0.5)' // QUICK TIP: Uncomment this line to see the button while testing!
+            bottom: '15px',
+            right: '15px',
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            backgroundColor: 'rgba(0,0,0,0.1)', // Very faint background
+            border: 'none',
+            fontSize: '20px',
+            cursor: 'pointer',
+            zIndex: 999999, // Absurdly high to prevent getting blocked
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: 0.6,
           }}
-        />
+          title="Admin Area"
+        >
+          🔒
+        </button>
       )}
 
-      {/* 2. THE VISIBLE TOGGLE BUTTON (Shows only when password is correct) */}
+      {/* --- THE UNLOCKED TOGGLE BUTTON --- */}
       {step === 'unlocked' && !isPanelOpen && (
         <button
           onClick={() => setIsPanelOpen(true)}
           style={{
             position: 'fixed',
-            bottom: '20px',
-            right: '20px',
+            bottom: '15px',
+            right: '15px',
             padding: '10px 20px',
             backgroundColor: '#000',
             color: '#fff',
@@ -77,68 +90,70 @@ export default function HiddenAdmin() {
             border: 'none',
             cursor: 'pointer',
             boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
-            zIndex: 9999
+            zIndex: 999999,
           }}
         >
-          ⚙️ Admin Panel
+          ⚙️ Open Panel
         </button>
       )}
 
-      {/* 3. THE POPUP OVERLAY (For both Password Prompt and Send Panel) */}
+      {/* --- THE POPUP OVERLAY --- */}
       {(step === 'prompt' || (step === 'unlocked' && isPanelOpen)) && (
         <div style={{
           position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-          backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 99999,
+          backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 9999999,
           display: 'flex', justifyContent: 'center', alignItems: 'center'
         }}>
           <div style={{
-            backgroundColor: '#fff', padding: '30px', borderRadius: '8px', 
-            width: '400px', textAlign: 'center', color: '#000'
+            backgroundColor: '#fff', padding: '30px', borderRadius: '12px', 
+            width: '90%', maxWidth: '400px', textAlign: 'center', color: '#000',
+            boxShadow: '0 10px 25px rgba(0,0,0,0.5)'
           }}>
             
-            {/* PASSWORD PROMPT UI */}
+            {/* PASSWORD PROMPT */}
             {step === 'prompt' && (
               <>
-                <h2>Admin Login</h2>
+                <h2 style={{ marginTop: 0 }}>Admin Access</h2>
                 <input 
                   type="password" 
                   placeholder="Enter Password..." 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && checkPassword()}
-                  style={{ width: '100%', padding: '10px', marginBottom: '15px' }}
+                  style={{ width: '100%', padding: '12px', marginBottom: '15px', borderRadius: '6px', border: '1px solid #ccc', boxSizing: 'border-box' }}
                   autoFocus
                 />
-                <button onClick={checkPassword} style={{ padding: '10px 20px', cursor: 'pointer', marginRight: '10px', backgroundColor: '#000', color: '#fff', border: 'none' }}>
-                  Verify
-                </button>
-                <button onClick={() => setStep('idle')} style={{ padding: '10px 20px', cursor: 'pointer', border: '1px solid #ccc', background: '#fff' }}>
-                  Cancel
-                </button>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <button onClick={checkPassword} style={{ flex: 1, padding: '12px', cursor: 'pointer', backgroundColor: '#000', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 'bold' }}>
+                    Verify
+                  </button>
+                  <button onClick={() => setStep('idle')} style={{ flex: 1, padding: '12px', cursor: 'pointer', border: '1px solid #ccc', background: '#f9f9f9', borderRadius: '6px', color: '#333' }}>
+                    Cancel
+                  </button>
+                </div>
               </>
             )}
 
-            {/* SEND MESSAGE UI */}
+            {/* SEND MESSAGE PANEL */}
             {step === 'unlocked' && isPanelOpen && (
               <>
-                <h2>Send Global Message</h2>
+                <h2 style={{ marginTop: 0 }}>Broadcast Message</h2>
                 <input 
                   type="text" 
                   placeholder="Type your message here..." 
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-                  style={{ width: '100%', padding: '10px', marginBottom: '15px' }}
+                  style={{ width: '100%', padding: '12px', marginBottom: '15px', borderRadius: '6px', border: '1px solid #ccc', boxSizing: 'border-box' }}
                   autoFocus
                 />
-                <button onClick={sendMessage} style={{ width: '100%', padding: '10px', cursor: 'pointer', backgroundColor: '#0070f3', color: '#fff', border: 'none', marginBottom: '10px' }}>
-                  Broadcast Message
+                <button onClick={sendMessage} style={{ width: '100%', padding: '12px', cursor: 'pointer', backgroundColor: '#3b82f6', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 'bold', marginBottom: '15px' }}>
+                  Send to Everyone
                 </button>
-                <br />
-                <button onClick={() => setIsPanelOpen(false)} style={{ background: 'none', border: 'none', color: '#888', cursor: 'pointer' }}>
-                  Hide Panel
+                <button onClick={() => setIsPanelOpen(false)} style={{ background: 'none', border: 'none', color: '#888', cursor: 'pointer', textDecoration: 'underline' }}>
+                  Close Panel
                 </button>
-                {status && <p style={{ marginTop: '10px', fontWeight: 'bold' }}>{status}</p>}
+                {status && <p style={{ marginTop: '15px', fontWeight: 'bold', color: status.includes('❌') ? 'red' : 'green' }}>{status}</p>}
               </>
             )}
 
