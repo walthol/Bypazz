@@ -8,6 +8,7 @@
       href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
       rel="stylesheet"
     />
+    <script src="https://js.pusher.com/8.0/pusher.min.js"></script>
     <style>
       html, body {
         margin: 0;
@@ -16,7 +17,7 @@
         overflow: hidden;
         font-family: 'Roboto Mono', monospace;
         background: linear-gradient(0deg, #1a1a1a, #000);
-        animation: backgroundFade 2s infinite alternate; // this is how fast it fades, change here
+        animation: backgroundFade 2s infinite alternate; 
       }
 
       @keyframes backgroundFade {
@@ -78,16 +79,76 @@
       center {
         margin-top: 50px;
       }
+
+      /* --- NEW ADMIN & BANNER STYLES --- */
+      #globalBanner {
+        position: fixed;
+        top: 0; left: 0; width: 100%;
+        background-color: #ff0000;
+        color: white;
+        text-align: center;
+        padding: 15px;
+        font-weight: bold;
+        font-size: 20px;
+        z-index: 99999;
+        display: none;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+      }
+
+      #adminLockBtn {
+        position: fixed; bottom: 15px; right: 15px;
+        width: 40px; height: 40px; border-radius: 50%;
+        background-color: rgba(255,255,255,0.1); border: none;
+        font-size: 20px; cursor: pointer; z-index: 9999;
+        display: flex; align-items: center; justify-content: center;
+        opacity: 0.3; transition: opacity 0.2s;
+      }
+      #adminLockBtn:hover { opacity: 1; }
+
+      #adminToggleBtn {
+        position: fixed; bottom: 15px; right: 15px;
+        padding: 10px 20px; background-color: #000; color: #fff;
+        border: 1px solid red; border-radius: 8px; cursor: pointer;
+        z-index: 9999; display: none; font-family: 'Roboto Mono', monospace;
+      }
+
+      #adminOverlay {
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        background-color: rgba(0,0,0,0.9); z-index: 99999;
+        display: none; justify-content: center; align-items: center;
+      }
+
+      .admin-modal {
+        background-color: #111; border: 1px solid red; border-radius: 12px;
+        padding: 30px; width: 90%; max-width: 400px; text-align: center; color: white;
+      }
+
+      .admin-modal input {
+        width: 100%; padding: 12px; margin-bottom: 15px;
+        border-radius: 6px; border: none; box-sizing: border-box;
+        font-family: 'Roboto Mono', monospace;
+      }
+
+      .admin-modal button {
+        width: 100%; padding: 12px; cursor: pointer;
+        background-color: red; color: white; border: none;
+        border-radius: 6px; font-weight: bold; margin-bottom: 10px;
+        font-family: 'Roboto Mono', monospace; font-size: 16px;
+      }
+
+      .admin-modal .cancel-btn {
+        background-color: transparent; border: 1px solid #555; color: #aaa;
+      }
     </style>
   </head>
   <body>
-    <!-- Splash Screen -->
+    <div id="globalBanner"></div>
+
     <div class="splash" id="splashScreen">
       <h1>Bypazz</h1>
       <p id="splashHint">Click Your Screen To Continue</p>
     </div>
 
-    <!-- Game Buttons -->
     <center>
       <button id="onlineChatroomsButton" class="game-button">Online Chat</button>
       <button id="vex6Button" class="game-button">Vex 6</button>
@@ -102,7 +163,32 @@
       <button id="windowsEmulatorButton" class="game-button">Windows Emulator</button>
     </center>
 
+    <button id="adminLockBtn" title="Admin Area">🔒</button>
+    <button id="adminToggleBtn">⚙️ Open Panel</button>
+
+    <div id="adminOverlay">
+      <div class="admin-modal">
+        
+        <div id="adminPromptDiv">
+          <h2>Admin Access</h2>
+          <input type="password" id="adminPasswordInput" placeholder="Enter Password..." />
+          <button id="verifyBtn">Verify</button>
+          <button class="cancel-btn" id="cancelPromptBtn">Cancel</button>
+        </div>
+
+        <div id="adminPanelDiv" style="display: none;">
+          <h2>Broadcast Message</h2>
+          <input type="text" id="adminMessageInput" placeholder="Type global message..." />
+          <button id="sendBroadcastBtn">Send to Everyone</button>
+          <button class="cancel-btn" id="closePanelBtn">Hide Panel</button>
+          <p id="adminStatus" style="color: #aaa; margin-top: 10px;"></p>
+        </div>
+
+      </div>
+    </div>
+
     <script>
+        // --- GAME LOGIC ---
         const splash = document.getElementById('splashScreen');
         const hint = document.getElementById('splashHint');
 
@@ -147,7 +233,6 @@
           iframe.style.display = 'block';
           win.document.body.appendChild(iframe);
 
-          // SHOW ALERT IN THE NEW TAB ONLY IF MESSAGE IS NOT EMPTY
           if(message && message.trim() !== "") {
             win.alert(message);
           }
@@ -161,7 +246,6 @@
           }
         }
 
-        // button assign thing
         document.getElementById('vex6Button').onclick = () => openGameInNewTab(urls.vex6, "");
         document.getElementById('slowRoadsButton').onclick = () => openGameInNewTab(urls.slowRoads, "");
         document.getElementById('clusterTrucksButton').onclick = () => openGameInNewTab(urls.clusterTrucks, "");
@@ -174,16 +258,132 @@
         document.getElementById('windowsEmulatorButton').onclick = () => openGameInNewTab(urls.windowsEmulator, "");
         document.getElementById('onlineChatroomsButton').onclick = () => openGameInNewTab(urls.onlineChatrooms, "JOIN THE BYPAZZ CHAT ROOM! \n\nChannel Name: BYPAZZ \nPassword: bypazz");
 
-                // HOW I CAN SET UP IF I FORGET!
-        // 1. Go To "Game Buttons"
-        // 2. Create The Button. The "button id" should be the same name as the name, but with the work "Button" at the end. same setup with capitals and crap like the others
-        // 3. Go To "GAME URLS"
-        // 4. Change what is typed in for the name already to your game id, and remove the word "Button"
-        // 5. Put in the url for the game and add "," to the second to last line like the other ones // prefered to be from unbanned games or smth so it wont be blocked, like if its emulated ig
-        // 6. Go to "button assign thing"
-        // 7. After copying and pasting a line there to make my button assign thing, replace the "get element by id" to my game id
-        // 8. On the far right replace the name to whatever i typed in for step 4
-        // 9. at the end of the button assign thing, add a notification if i want. leave it empty with no spaces if i dont want a notification
+
+        // --- PUSHER: RECEIVE LIVE MESSAGES ---
+        // Put your actual Pusher Key and Cluster here
+        const pusher = new Pusher('YOUR_PUSHER_KEY', {
+          cluster: 'YOUR_PUSHER_CLUSTER'
+        });
+
+        const channel = pusher.subscribe('global-channel');
+        channel.bind('new-message', function(data) {
+          const banner = document.getElementById('globalBanner');
+          banner.innerText = data.text;
+          banner.style.display = 'block';
+          
+          // Hide after 5 seconds
+          setTimeout(() => {
+            banner.style.display = 'none';
+            banner.innerText = '';
+          }, 5000);
+        });
+
+
+        // --- ADMIN UI LOGIC ---
+        const ADMIN_PASSWORD = "bypazz_admin"; // CHANGE THIS! Remember, kids can inspect element and see this.
+
+        const adminLockBtn = document.getElementById('adminLockBtn');
+        const adminToggleBtn = document.getElementById('adminToggleBtn');
+        const adminOverlay = document.getElementById('adminOverlay');
+        const adminPromptDiv = document.getElementById('adminPromptDiv');
+        const adminPanelDiv = document.getElementById('adminPanelDiv');
+        
+        const adminPasswordInput = document.getElementById('adminPasswordInput');
+        const verifyBtn = document.getElementById('verifyBtn');
+        const cancelPromptBtn = document.getElementById('cancelPromptBtn');
+        
+        const adminMessageInput = document.getElementById('adminMessageInput');
+        const sendBroadcastBtn = document.getElementById('sendBroadcastBtn');
+        const closePanelBtn = document.getElementById('closePanelBtn');
+        const adminStatus = document.getElementById('adminStatus');
+
+        let isUnlocked = false;
+
+        // 1. Click lock -> Show prompt
+        adminLockBtn.onclick = () => {
+          adminOverlay.style.display = 'flex';
+          adminPromptDiv.style.display = 'block';
+          adminPanelDiv.style.display = 'none';
+          adminPasswordInput.value = '';
+          adminPasswordInput.focus();
+        };
+
+        // Cancel prompt
+        cancelPromptBtn.onclick = () => {
+          adminOverlay.style.display = 'none';
+        };
+
+        // 2. Verify Password
+        verifyBtn.onclick = () => {
+          if (adminPasswordInput.value === ADMIN_PASSWORD) {
+            isUnlocked = true;
+            adminLockBtn.style.display = 'none'; // Hide lock
+            adminPromptDiv.style.display = 'none'; // Hide prompt
+            adminPanelDiv.style.display = 'block'; // Show panel
+            adminMessageInput.focus();
+          } else {
+            window.location.reload(); // Wrong password? Insta-refresh
+          }
+        };
+
+        // Allow pressing Enter to verify
+        adminPasswordInput.addEventListener("keypress", function(event) {
+          if (event.key === "Enter") verifyBtn.click();
+        });
+
+        // 3. Close panel (but stay unlocked)
+        closePanelBtn.onclick = () => {
+          adminOverlay.style.display = 'none';
+          adminToggleBtn.style.display = 'block'; // Show the "Open Panel" button
+        };
+
+        // 4. Re-open panel if already unlocked
+        adminToggleBtn.onclick = () => {
+          adminOverlay.style.display = 'flex';
+          adminPanelDiv.style.display = 'block';
+          adminPromptDiv.style.display = 'none';
+          adminMessageInput.focus();
+        };
+
+        // 5. Send Message to the Vercel API
+        sendBroadcastBtn.onclick = async () => {
+          const text = adminMessageInput.value;
+          if (!text) return;
+
+          adminStatus.innerText = "Sending...";
+          adminStatus.style.color = "#aaa";
+
+          try {
+            // YOU STILL NEED YOUR VERCEL API ROUTE (/api/send-message) FOR THIS TO WORK!
+            const res = await fetch('/api/send-message', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ text: text, secretPassword: adminPasswordInput.value })
+            });
+
+            if (res.ok) {
+              adminStatus.innerText = "✅ Broadcast sent!";
+              adminStatus.style.color = "lightgreen";
+              adminMessageInput.value = '';
+              
+              setTimeout(() => {
+                closePanelBtn.click(); // Auto-close panel after 2 seconds
+                adminStatus.innerText = "";
+              }, 2000);
+            } else {
+              adminStatus.innerText = "❌ Failed. Check Vercel logs.";
+              adminStatus.style.color = "red";
+            }
+          } catch (err) {
+            adminStatus.innerText = "❌ Network error.";
+            adminStatus.style.color = "red";
+          }
+        };
+
+        // Allow pressing Enter to send
+        adminMessageInput.addEventListener("keypress", function(event) {
+          if (event.key === "Enter") sendBroadcastBtn.click();
+        });
     </script>
   </body>
 </html>
