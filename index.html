@@ -4,97 +4,44 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bypazz</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet" />
     <script src="https://js.pusher.com/8.0/pusher.min.js"></script>
     <style>
       html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        overflow: hidden;
+        margin: 0; padding: 0; height: 100%; overflow: hidden;
         font-family: 'Roboto Mono', monospace;
         background: linear-gradient(0deg, #1a1a1a, #000);
         animation: backgroundFade 2s infinite alternate; 
       }
-
       @keyframes backgroundFade {
         0% { background: #1a1a1a; }
         50% { background: #0d0d0d; }
         100% { background: #000; }
       }
-
       .splash {
-        position: fixed;
-        top:0; left:0;
-        width:100vw; height:100vh;
-        background-color: rgba(0,0,0,0.85);
-        color: white;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 999;
-        cursor: pointer;
-        transition: all 1s ease;
+        position: fixed; top:0; left:0; width:100vw; height:100vh;
+        background-color: rgba(0,0,0,0.85); color: white; display: flex;
+        flex-direction: column; justify-content: center; align-items: center;
+        z-index: 999; cursor: pointer; transition: all 1s ease;
       }
-
-      .splash.fade {
-        transform: scale(1.5);
-        opacity: 0;
-      }
-
-      .splash h1 {
-        font-size: 64px;
-        font-weight: bold;
-        margin:0;
-      }
-
-      .splash p {
-        font-size: 24px;
-        margin-top: 20px;
-        opacity: 0;
-        transition: opacity 1s ease;
-      }
-
-      .splash.showHint p {
-        opacity: 1;
-      }
-
+      .splash.fade { transform: scale(1.5); opacity: 0; }
+      .splash h1 { font-size: 64px; font-weight: bold; margin:0; }
+      .splash p { font-size: 24px; margin-top: 20px; opacity: 0; transition: opacity 1s ease; }
+      .splash.showHint p { opacity: 1; }
       .game-button {
-        background-color: black;
-        color: white;
-        border: 1px solid red;
-        font-size: 26px;
-        width: 100%;
-        cursor: pointer;
-        border-radius: 10px;
-        margin: 10px 0;
-        max-width: 600px;
-        display: block;
+        background-color: black; color: white; border: 1px solid red;
+        font-size: 26px; width: 100%; cursor: pointer; border-radius: 10px;
+        margin: 10px 0; max-width: 600px; display: block;
       }
+      center { margin-top: 50px; }
 
-      center {
-        margin-top: 50px;
-      }
-
-      /* --- NEW ADMIN & BANNER STYLES --- */
+      /* ADMIN & BANNER STYLES */
       #globalBanner {
-        position: fixed;
-        top: 0; left: 0; width: 100%;
-        background-color: #ff0000;
-        color: white;
-        text-align: center;
-        padding: 15px;
-        font-weight: bold;
-        font-size: 20px;
-        z-index: 99999;
-        display: none;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+        position: fixed; top: 0; left: 0; width: 100%;
+        background-color: #ff0000; color: white; text-align: center;
+        padding: 15px; font-weight: bold; font-size: 20px; z-index: 99999;
+        display: none; box-shadow: 0 4px 6px rgba(0,0,0,0.5);
       }
-
       #adminLockBtn {
         position: fixed; bottom: 15px; right: 15px;
         width: 40px; height: 40px; border-radius: 50%;
@@ -104,41 +51,31 @@
         opacity: 0.3; transition: opacity 0.2s;
       }
       #adminLockBtn:hover { opacity: 1; }
-
       #adminToggleBtn {
-        position: fixed; bottom: 15px; right: 15px;
-        padding: 10px 20px; background-color: #000; color: #fff;
-        border: 1px solid red; border-radius: 8px; cursor: pointer;
-        z-index: 9999; display: none; font-family: 'Roboto Mono', monospace;
+        position: fixed; bottom: 15px; right: 15px; padding: 10px 20px;
+        background-color: #000; color: #fff; border: 1px solid red;
+        border-radius: 8px; cursor: pointer; z-index: 9999; display: none;
+        font-family: 'Roboto Mono', monospace;
       }
-
       #adminOverlay {
         position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
         background-color: rgba(0,0,0,0.9); z-index: 99999;
         display: none; justify-content: center; align-items: center;
       }
-
       .admin-modal {
         background-color: #111; border: 1px solid red; border-radius: 12px;
         padding: 30px; width: 90%; max-width: 400px; text-align: center; color: white;
       }
-
       .admin-modal input {
-        width: 100%; padding: 12px; margin-bottom: 15px;
-        border-radius: 6px; border: none; box-sizing: border-box;
-        font-family: 'Roboto Mono', monospace;
+        width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 6px;
+        border: none; box-sizing: border-box; font-family: 'Roboto Mono', monospace;
       }
-
       .admin-modal button {
-        width: 100%; padding: 12px; cursor: pointer;
-        background-color: red; color: white; border: none;
-        border-radius: 6px; font-weight: bold; margin-bottom: 10px;
-        font-family: 'Roboto Mono', monospace; font-size: 16px;
+        width: 100%; padding: 12px; cursor: pointer; background-color: red;
+        color: white; border: none; border-radius: 6px; font-weight: bold;
+        margin-bottom: 10px; font-family: 'Roboto Mono', monospace; font-size: 16px;
       }
-
-      .admin-modal .cancel-btn {
-        background-color: transparent; border: 1px solid #555; color: #aaa;
-      }
+      .admin-modal .cancel-btn { background-color: transparent; border: 1px solid #555; color: #aaa; }
     </style>
   </head>
   <body>
@@ -168,14 +105,12 @@
 
     <div id="adminOverlay">
       <div class="admin-modal">
-        
         <div id="adminPromptDiv">
           <h2>Admin Access</h2>
           <input type="password" id="adminPasswordInput" placeholder="Enter Password..." />
           <button id="verifyBtn">Verify</button>
           <button class="cancel-btn" id="cancelPromptBtn">Cancel</button>
         </div>
-
         <div id="adminPanelDiv" style="display: none;">
           <h2>Broadcast Message</h2>
           <input type="text" id="adminMessageInput" placeholder="Type global message..." />
@@ -183,25 +118,18 @@
           <button class="cancel-btn" id="closePanelBtn">Hide Panel</button>
           <p id="adminStatus" style="color: #aaa; margin-top: 10px;"></p>
         </div>
-
       </div>
     </div>
 
     <script>
         // --- GAME LOGIC ---
         const splash = document.getElementById('splashScreen');
-        const hint = document.getElementById('splashHint');
-
-        setTimeout(() => {
-          splash.classList.add('showHint');
-        }, 1000);
-
+        setTimeout(() => splash.classList.add('showHint'), 1000);
         splash.addEventListener('click', () => {
           splash.classList.add('fade');
           setTimeout(() => splash.style.display = 'none', 1000);
         });
 
-        // GAME URLS
         const urls = {
           vex6: "https://script.google.com/macros/s/AKfycbzi5I00V5E4UoWKNwYMpazWyXDs1J4m0hui0937lFzMRKs31QGZ3rcUHRroAt13wmc9tw/exec",
           slowRoads: "https://script.google.com/macros/s/AKfycbzqDA2SnuVZ3DRelxxbUxSV9Z1RJz_gQfDRx06WUpgppWgrdDEErtZ1Lev9O6j2w9ioBQ/exec",
@@ -219,50 +147,30 @@
         function openGameInNewTab(url, message="") {
           const win = window.open("about:blank", "_blank");
           if (!win) return alert("Popup blocked! Allow popups for this site.");
-
-          win.document.body.style.margin = '0';
-          win.document.body.style.height = '100vh';
-          win.document.body.style.backgroundColor = 'black';
-          win.document.documentElement.style.height = '100%';
-
+          win.document.body.style.margin = '0'; win.document.body.style.height = '100vh'; win.document.body.style.backgroundColor = 'black';
           const iframe = win.document.createElement('iframe');
-          iframe.src = url;
-          iframe.style.border = 'none';
-          iframe.style.width = '100vw';
-          iframe.style.height = '100vh';
-          iframe.style.display = 'block';
+          iframe.src = url; iframe.style.border = 'none'; iframe.style.width = '100vw'; iframe.style.height = '100vh';
           win.document.body.appendChild(iframe);
-
-          if(message && message.trim() !== "") {
-            win.alert(message);
-          }
-
-          if (win.document.documentElement.requestFullscreen) {
-            win.document.documentElement.requestFullscreen();
-          } else if (win.document.documentElement.webkitRequestFullscreen) {
-            win.document.documentElement.webkitRequestFullscreen();
-          } else if (win.document.documentElement.msRequestFullscreen) {
-            win.document.documentElement.msRequestFullscreen();
-          }
+          if(message) win.alert(message);
         }
 
-        document.getElementById('vex6Button').onclick = () => openGameInNewTab(urls.vex6, "");
-        document.getElementById('slowRoadsButton').onclick = () => openGameInNewTab(urls.slowRoads, "");
-        document.getElementById('clusterTrucksButton').onclick = () => openGameInNewTab(urls.clusterTrucks, "");
-        document.getElementById('motoX3MButton').onclick = () => openGameInNewTab(urls.motoX3M, "");
-        document.getElementById('snowRider3DButton').onclick = () => openGameInNewTab(urls.snowRider3D, "");
-        document.getElementById('happyWheelsButton').onclick = () => openGameInNewTab(urls.happyWheels, "");
-        document.getElementById('theBackroomsButton').onclick = () => openGameInNewTab(urls.theBackrooms, "");
-        document.getElementById('cookieClickerButton').onclick = () => openGameInNewTab(urls.cookieClicker, "");
-        document.getElementById('driftHuntersButton').onclick = () => openGameInNewTab(urls.driftHunters, "");
-        document.getElementById('windowsEmulatorButton').onclick = () => openGameInNewTab(urls.windowsEmulator, "");
+        document.getElementById('vex6Button').onclick = () => openGameInNewTab(urls.vex6);
+        document.getElementById('slowRoadsButton').onclick = () => openGameInNewTab(urls.slowRoads);
+        document.getElementById('clusterTrucksButton').onclick = () => openGameInNewTab(urls.clusterTrucks);
+        document.getElementById('motoX3MButton').onclick = () => openGameInNewTab(urls.motoX3M);
+        document.getElementById('snowRider3DButton').onclick = () => openGameInNewTab(urls.snowRider3D);
+        document.getElementById('happyWheelsButton').onclick = () => openGameInNewTab(urls.happyWheels);
+        document.getElementById('theBackroomsButton').onclick = () => openGameInNewTab(urls.theBackrooms);
+        document.getElementById('cookieClickerButton').onclick = () => openGameInNewTab(urls.cookieClicker);
+        document.getElementById('driftHuntersButton').onclick = () => openGameInNewTab(urls.driftHunters);
+        document.getElementById('windowsEmulatorButton').onclick = () => openGameInNewTab(urls.windowsEmulator);
         document.getElementById('onlineChatroomsButton').onclick = () => openGameInNewTab(urls.onlineChatrooms, "JOIN THE BYPAZZ CHAT ROOM! \n\nChannel Name: BYPAZZ \nPassword: bypazz");
 
 
         // --- PUSHER: RECEIVE LIVE MESSAGES ---
-        // Put your actual Pusher Key and Cluster here
-        const pusher = new Pusher('YOUR_PUSHER_KEY', {
-          cluster: 'YOUR_PUSHER_CLUSTER'
+        // REPLACE THESE TWO STRINGS WITH YOUR ACTUAL KEYS!
+        const pusher = new Pusher('c4d7ec2739da31e5d600', {
+          cluster: 'us2'
         });
 
         const channel = pusher.subscribe('global-channel');
@@ -270,17 +178,12 @@
           const banner = document.getElementById('globalBanner');
           banner.innerText = data.text;
           banner.style.display = 'block';
-          
-          // Hide after 5 seconds
-          setTimeout(() => {
-            banner.style.display = 'none';
-            banner.innerText = '';
-          }, 5000);
+          setTimeout(() => { banner.style.display = 'none'; banner.innerText = ''; }, 5000);
         });
 
-
         // --- ADMIN UI LOGIC ---
-        const ADMIN_PASSWORD = "bypazz_admin"; // CHANGE THIS! Remember, kids can inspect element and see this.
+        // Change this password to whatever you want!
+        const ADMIN_PASSWORD = "bypazz_admin"; 
 
         const adminLockBtn = document.getElementById('adminLockBtn');
         const adminToggleBtn = document.getElementById('adminToggleBtn');
@@ -297,64 +200,40 @@
         const closePanelBtn = document.getElementById('closePanelBtn');
         const adminStatus = document.getElementById('adminStatus');
 
-        let isUnlocked = false;
-
-        // 1. Click lock -> Show prompt
         adminLockBtn.onclick = () => {
-          adminOverlay.style.display = 'flex';
-          adminPromptDiv.style.display = 'block';
-          adminPanelDiv.style.display = 'none';
-          adminPasswordInput.value = '';
-          adminPasswordInput.focus();
+          adminOverlay.style.display = 'flex'; adminPromptDiv.style.display = 'block';
+          adminPanelDiv.style.display = 'none'; adminPasswordInput.value = ''; adminPasswordInput.focus();
         };
 
-        // Cancel prompt
-        cancelPromptBtn.onclick = () => {
-          adminOverlay.style.display = 'none';
-        };
+        cancelPromptBtn.onclick = () => adminOverlay.style.display = 'none';
 
-        // 2. Verify Password
         verifyBtn.onclick = () => {
           if (adminPasswordInput.value === ADMIN_PASSWORD) {
-            isUnlocked = true;
-            adminLockBtn.style.display = 'none'; // Hide lock
-            adminPromptDiv.style.display = 'none'; // Hide prompt
-            adminPanelDiv.style.display = 'block'; // Show panel
-            adminMessageInput.focus();
+            adminLockBtn.style.display = 'none'; adminPromptDiv.style.display = 'none';
+            adminPanelDiv.style.display = 'block'; adminMessageInput.focus();
           } else {
-            window.location.reload(); // Wrong password? Insta-refresh
+            window.location.reload(); 
           }
         };
 
-        // Allow pressing Enter to verify
-        adminPasswordInput.addEventListener("keypress", function(event) {
-          if (event.key === "Enter") verifyBtn.click();
-        });
+        adminPasswordInput.addEventListener("keypress", (e) => e.key === "Enter" && verifyBtn.click());
 
-        // 3. Close panel (but stay unlocked)
         closePanelBtn.onclick = () => {
-          adminOverlay.style.display = 'none';
-          adminToggleBtn.style.display = 'block'; // Show the "Open Panel" button
+          adminOverlay.style.display = 'none'; adminToggleBtn.style.display = 'block';
         };
 
-        // 4. Re-open panel if already unlocked
         adminToggleBtn.onclick = () => {
-          adminOverlay.style.display = 'flex';
-          adminPanelDiv.style.display = 'block';
-          adminPromptDiv.style.display = 'none';
-          adminMessageInput.focus();
+          adminOverlay.style.display = 'flex'; adminPanelDiv.style.display = 'block';
+          adminPromptDiv.style.display = 'none'; adminMessageInput.focus();
         };
 
-        // 5. Send Message to the Vercel API
         sendBroadcastBtn.onclick = async () => {
           const text = adminMessageInput.value;
           if (!text) return;
-
-          adminStatus.innerText = "Sending...";
-          adminStatus.style.color = "#aaa";
+          adminStatus.innerText = "Sending..."; adminStatus.style.color = "#aaa";
 
           try {
-            // YOU STILL NEED YOUR VERCEL API ROUTE (/api/send-message) FOR THIS TO WORK!
+            // This triggers the file below!
             const res = await fetch('/api/send-message', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -362,28 +241,17 @@
             });
 
             if (res.ok) {
-              adminStatus.innerText = "✅ Broadcast sent!";
-              adminStatus.style.color = "lightgreen";
+              adminStatus.innerText = "✅ Broadcast sent!"; adminStatus.style.color = "lightgreen";
               adminMessageInput.value = '';
-              
-              setTimeout(() => {
-                closePanelBtn.click(); // Auto-close panel after 2 seconds
-                adminStatus.innerText = "";
-              }, 2000);
+              setTimeout(() => { closePanelBtn.click(); adminStatus.innerText = ""; }, 2000);
             } else {
-              adminStatus.innerText = "❌ Failed. Check Vercel logs.";
-              adminStatus.style.color = "red";
+              adminStatus.innerText = "❌ Failed. Check Vercel logs."; adminStatus.style.color = "red";
             }
           } catch (err) {
-            adminStatus.innerText = "❌ Network error.";
-            adminStatus.style.color = "red";
+            adminStatus.innerText = "❌ Network error."; adminStatus.style.color = "red";
           }
         };
-
-        // Allow pressing Enter to send
-        adminMessageInput.addEventListener("keypress", function(event) {
-          if (event.key === "Enter") sendBroadcastBtn.click();
-        });
+        adminMessageInput.addEventListener("keypress", (e) => e.key === "Enter" && sendBroadcastBtn.click());
     </script>
   </body>
 </html>
