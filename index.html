@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bypazz</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        font-family: 'Roboto Mono', monospace;
+        background: linear-gradient(0deg, #1a1a1a, #000);
+        animation: backgroundFade 2s infinite alternate; // this is how fast it fades
+      }
+
+      @keyframes backgroundFade {
+        0% { background: #1a1a1a; }
+        50% { background: #0d0d0d; }
+        100% { background: #000; }
+      }
+
+      .splash {
+        position: fixed;
+        top:0; left:0;
+        width:100vw; height:100vh;
+        background-color: rgba(0,0,0,0.85);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+        cursor: pointer;
+        transition: all 1s ease;
+      }
+
+      .splash.fade {
+        transform: scale(1.5);
+        opacity: 0;
+      }
+
+      .splash h1 {
+        font-size: 64px;
+        font-weight: bold;
+        margin:0;
+      }
+
+      .splash p {
+        font-size: 24px;
+        margin-top: 20px;
+        opacity: 0;
+        transition: opacity 1s ease;
+      }
+
+      .splash.showHint p {
+        opacity: 1;
+      }
+
+      .game-button {
+        background-color: black;
+        color: white;
+        border: 1px solid red;
+        font-size: 26px;
+        width: 100%;
+        cursor: pointer;
+        border-radius: 10px;
+        margin: 10px 0;
+        max-width: 600px;
+        display: block;
+      }
+
+      center {
+        margin-top: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Splash Screen -->
+    <div class="splash" id="splashScreen">
+      <h1>Bypazz</h1>
+      <p id="splashHint">Click Your Screen To Continue</p>
+    </div>
+
+    <!-- Game Buttons -->
+    <center>
+      <button id="onlineChatroomsButton" class="game-button">Online Chat</button>
+      <button id="vex6Button" class="game-button">Vex 6</button>
+      <button id="slowRoadsButton" class="game-button">Slow.Roads</button>
+      <button id="clusterTrucksButton" class="game-button">Cluster Trucks</button>
+      <button id="motoX3MButton" class="game-button">Moto.X3M</button>
+      <button id="snowRider3DButton" class="game-button">Snow Rider 3D</button>
+      <button id="happyWheelsButton" class="game-button">Happy Wheels</button>
+      <button id="theBackroomsButton" class="game-button">Backrooms Game</button>
+      <button id="cookieClickerButton" class="game-button">Cookie Clicker</button>
+      <button id="driftHuntersButton" class="game-button">Drift Hunters</button>
+      <button id="windowsEmulatorButton" class="game-button">Windows Emulator</button>
+    </center>
+
+    <script>
+        const splash = document.getElementById('splashScreen');
+        const hint = document.getElementById('splashHint');
+
+        setTimeout(() => {
+          splash.classList.add('showHint');
+        }, 1000);
+
+        splash.addEventListener('click', () => {
+          splash.classList.add('fade');
+          setTimeout(() => splash.style.display = 'none', 1000);
+        });
+
+        // GAME URLS
+        const urls = {
+          vex6: "https://script.google.com/macros/s/AKfycbzi5I00V5E4UoWKNwYMpazWyXDs1J4m0hui0937lFzMRKs31QGZ3rcUHRroAt13wmc9tw/exec",
+          slowRoads: "https://script.google.com/macros/s/AKfycbzqDA2SnuVZ3DRelxxbUxSV9Z1RJz_gQfDRx06WUpgppWgrdDEErtZ1Lev9O6j2w9ioBQ/exec",
+          clusterTrucks: "https://script.google.com/macros/s/AKfycbw6e8fflbfydV7kom5id09nKaM6ix0hLlXHbs3XHOnxzrndUgPtHUHENrwKomI2Hpk3/exec",
+          motoX3M: "https://script.google.com/macros/s/AKfycbw7_zG02ZMXnPSdwCx0CcmN8eX_0Bk3715TSP-Eglb1DyVhp7RxShuXq4qJ8Q2s7cnW/exec",
+          snowRider3D: "https://script.google.com/macros/s/AKfycbw5Z-Ryg_JfIIDYH7pzzPKXlr2tN0HCw-tT_ZvxBGDPsDDY41ewPVneVeLzelfpnBab/exec",
+          happyWheels: "https://script.google.com/macros/s/AKfycbyfMPVIGx6dJPrYKeE9e4Erj949-dH28pWVRjdV1vgnoylpBV8af03JNLoz2MwAIBLECg/exec",
+          theBackrooms: "https://storage.googleapis.com/test-41376.appspot.com/broom.html",
+          cookieClicker: "https://script.google.com/macros/s/AKfycbxGM35J29NkO-2LYjxWj_cA9IUaaXypkUy-LqXyLRbGTz0R6lXmAEapz1STN1jlTIRavw/exec",
+          driftHunters: "https://script.google.com/macros/s/AKfycbw8iHPqdVFEzquUYbNxFVAu1Tw4Nri5SWMRLdP_c7a84vCOHVG7YUWuhjSVptg1SVHr/exec",
+          windowsEmulator: "https://terminator.aeza.net/en/",
+          onlineChatrooms: "https://www.chatcrypt.com/"
+        };
+
+        function openGameInNewTab(url, message="") {
+          const win = window.open("about:blank", "_blank");
+          if (!win) return alert("Popup blocked! Allow popups for this site.");
+
+          win.document.body.style.margin = '0';
+          win.document.body.style.height = '100vh';
+          win.document.body.style.backgroundColor = 'black';
+          win.document.documentElement.style.height = '100%';
+
+          const iframe = win.document.createElement('iframe');
+          iframe.src = url;
+          iframe.style.border = 'none';
+          iframe.style.width = '100vw';
+          iframe.style.height = '100vh';
+          iframe.style.display = 'block';
+          win.document.body.appendChild(iframe);
+
+          // SHOW ALERT IN THE NEW TAB ONLY IF MESSAGE IS NOT EMPTY
+          if(message && message.trim() !== "") {
+            win.alert(message);
+          }
+
+          if (win.document.documentElement.requestFullscreen) {
+            win.document.documentElement.requestFullscreen();
+          } else if (win.document.documentElement.webkitRequestFullscreen) {
+            win.document.documentElement.webkitRequestFullscreen();
+          } else if (win.document.documentElement.msRequestFullscreen) {
+            win.document.documentElement.msRequestFullscreen();
+          }
+        }
+
+        // button assign thing
+        document.getElementById('vex6Button').onclick = () => openGameInNewTab(urls.vex6, "");
+        document.getElementById('slowRoadsButton').onclick = () => openGameInNewTab(urls.slowRoads, "");
+        document.getElementById('clusterTrucksButton').onclick = () => openGameInNewTab(urls.clusterTrucks, "");
+        document.getElementById('motoX3MButton').onclick = () => openGameInNewTab(urls.motoX3M, "");
+        document.getElementById('snowRider3DButton').onclick = () => openGameInNewTab(urls.snowRider3D, "");
+        document.getElementById('happyWheelsButton').onclick = () => openGameInNewTab(urls.happyWheels, "");
+        document.getElementById('theBackroomsButton').onclick = () => openGameInNewTab(urls.theBackrooms, "");
+        document.getElementById('cookieClickerButton').onclick = () => openGameInNewTab(urls.cookieClicker, "");
+        document.getElementById('driftHuntersButton').onclick = () => openGameInNewTab(urls.driftHunters, "");
+        document.getElementById('windowsEmulatorButton').onclick = () => openGameInNewTab(urls.windowsEmulator, "");
+        document.getElementById('onlineChatroomsButton').onclick = () => openGameInNewTab(urls.onlineChatrooms, "JOIN THE BYPAZZ CHAT ROOM! \n\nChannel Name: BYPAZZ \nPassword: bypazz");
+
+                // HOW I CAN SET UP IF I FORGET!
+        // 1. Go To "Game Buttons"
+        // 2. Create The Button. The "button id" should be the same name as the name, but with the work "Button" at the end. same setup with capitals and crap like the others
+        // 3. Go To "GAME URLS"
+        // 4. Change what is typed in for the name already to your game id, and remove the word "Button"
+        // 5. Put in the url for the game and add "," to the second to last line like the other ones // prefered to be from unbanned games or smth so it wont be blocked, like if its emulated ig
+        // 6. Go to "button assign thing"
+        // 7. After copying and pasting a line there to make my button assign thing, replace the "get element by id" to my game id
+        // 8. On the far right replace the name to whatever i typed in for step 4
+        // 9. at the end of the button assign thing, add a notification if i want. leave it empty with no spaces if i dont want a notification
+    </script>
+  </body>
+</html>
