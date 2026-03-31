@@ -1,7 +1,7 @@
 // api/send-message.js
-import Pusher from 'pusher';
+const Pusher = require('pusher'); // <-- Changed from 'import' to 'require'
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) { // <-- Changed export syntax
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -9,8 +9,7 @@ export default async function handler(req, res) {
 
   const { text, secretPassword } = req.body;
 
-  // 1. Verify the password matches the one in Vercel Env Vars
-  // Note: Set ADMIN_PASSWORD in your Vercel dashboard to match the HTML file!
+  // 1. Verify the password matches the Vercel Env Var
   if (secretPassword !== process.env.ADMIN_PASSWORD) {
     return res.status(401).json({ error: 'Unauthorized: Wrong password' });
   }
@@ -31,7 +30,8 @@ export default async function handler(req, res) {
     });
     return res.status(200).json({ success: true });
   } catch (error) {
-    console.error("Pusher error:", error);
-    return res.status(500).json({ error: 'Failed to send message' });
+    // If it fails here, it WILL show up in Vercel logs now
+    console.error("Pusher error:", error); 
+    return res.status(500).json({ error: 'Failed to send message', details: error.message });
   }
-}
+};
