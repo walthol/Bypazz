@@ -29,18 +29,17 @@
       .splash p { font-size: 24px; margin-top: 20px; opacity: 0; transition: opacity 1s ease; }
       .splash.showHint p { opacity: 1; }
       
-      /* UPDATE LOGGER STYLE */
-      .update-logger {
+      /* SIMPLE UPDATE TEXT */
+      .simple-update {
         position: absolute;
         top: 15px;
-        left: 15px;
-        background-color: rgba(0, 0, 0, 0.7);
-        color: #00ff00;
-        border: 1px solid #00ff00;
-        padding: 8px 12px;
-        border-radius: 6px;
-        font-size: 14px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        color: white;
+        font-size: 16px;
         z-index: 998;
+        pointer-events: none; /* Prevents the text from blocking clicks on elements below it */
       }
 
       .game-button {
@@ -101,8 +100,8 @@
       <p id="splashHint">Click Your Screen To Continue</p>
     </div>
 
-    <div class="update-logger" id="updateLogger">
-      <strong>Update:</strong> Added Super Mario Bros (scroll down) And This Update Header
+    <div class="simple-update" id="updateLogger">
+      <strong>Update:</strong> Added scrolling functionality.
     </div>
 
     <center>
