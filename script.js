@@ -8,5 +8,6 @@
         // 7. After copying and pasting a line there to make my button assign thing, replace the "get element by id" to my game id
         // 8. On the far right replace the name to whatever i typed in for step 4
         // 9. using the button id and other thing just like the previous step, add the open notification.
+        // incase i forget, "window.open(urls.NAMEOFTHEAPPTHING, '_blank');" opens not in about:blank while 
         //
         // also yes this file is pointless
