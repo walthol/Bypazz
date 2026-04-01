@@ -167,7 +167,7 @@
         document.getElementById('driftHuntersButton').onclick = () => openGameInNewTab(urls.driftHunters);
         document.getElementById('windowsEmulatorButton').onclick = () => openGameInNewTab(urls.windowsEmulator);
         document.getElementById('onlineChatroomsButton').onclick = () => openGameInNewTab(urls.onlineChatrooms, "JOIN THE BYPAZZ CHAT ROOM! \n\nChannel Name: BYPAZZ \nPassword: bypazz");
-        document.getElementById('clickSpeedTest').onclick = () => openGameInNewTab(urls.clickSpeedTest);
+        document.getElementById('clickSpeedTest').onclick = () => window.open(urls.clickSpeedTest, '_blank');
 
 
         // --- PUSHER: RECEIVE LIVE MESSAGES ---
