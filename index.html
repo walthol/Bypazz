@@ -29,7 +29,6 @@
       .splash p { font-size: 24px; margin-top: 20px; opacity: 0; transition: opacity 1s ease; }
       .splash.showHint p { opacity: 1; }
       
-      /* SIMPLE UPDATE TEXT */
       .simple-update {
         position: absolute;
         top: 15px;
@@ -39,7 +38,7 @@
         color: white;
         font-size: 16px;
         z-index: 998;
-        pointer-events: none; /* Prevents the text from blocking clicks on elements below it */
+        pointer-events: none;
       }
 
       .game-button {
@@ -48,8 +47,7 @@
         margin: 10px 0; max-width: 600px; display: block;
       }
       center { margin-top: 70px; margin-bottom: 80px; }
-
-      /* ADMIN & BANNER STYLES */
+      
       #globalBanner {
         position: fixed; top: 0; left: 0; width: 100%;
         background-color: #ff0000; color: white; text-align: center;
@@ -99,8 +97,8 @@
       <h1>Bypazz</h1>
       <p id="splashHint">Click Your Screen To Continue</p>
     </div>
-
-    <div class="simple-update" id="updateLogger">
+    
+    <div class="simple-update" id="updateLogger"> 
       <strong>•</strong> <strong>Update:</strong> Added Scrolling, Super Mario Bros, Update Header <strong>•</strong>
     </div>
 
@@ -121,7 +119,7 @@
     </center>
 
     <button id="adminLockBtn" title="Admin Area">🔒</button>
-    <button id="adminToggleBtn">⚙️ Open Panel</button>
+    <button id="adminToggleBtn">Open Panel</button>
 
     <div id="adminOverlay">
       <div class="admin-modal">
@@ -142,7 +140,6 @@
     </div>
 
     <script>
-        // --- GAME LOGIC ---
         const splash = document.getElementById('splashScreen');
         setTimeout(() => splash.classList.add('showHint'), 1000);
         splash.addEventListener('click', () => {
@@ -191,8 +188,7 @@
         document.getElementById('superMarioBros').onclick = () => openGameInNewTab(urls.superMarioBros, "Credits To https://cim.alwaysdata.net/jeu/");
 
 
-        // --- PUSHER: RECEIVE LIVE MESSAGES ---
-        // REPLACE THESE TWO STRINGS WITH YOUR ACTUAL KEYS!
+        
         const pusher = new Pusher('c4d7ec2739da31e5d600', {
           cluster: 'us2'
         });
@@ -205,8 +201,7 @@
           setTimeout(() => { banner.style.display = 'none'; banner.innerText = ''; }, 5000);
         });
 
-        // --- ADMIN UI LOGIC ---
-        // Change this password to whatever you want!
+        
         const ADMIN_PASSWORD = "16502690"; 
 
         const adminLockBtn = document.getElementById('adminLockBtn');
@@ -257,7 +252,7 @@
           adminStatus.innerText = "Sending..."; adminStatus.style.color = "#aaa";
 
           try {
-            // This triggers the file below!
+            
             const res = await fetch('/api/send-message', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -265,14 +260,14 @@
             });
 
             if (res.ok) {
-              adminStatus.innerText = "✅ Broadcast sent!"; adminStatus.style.color = "lightgreen";
+              adminStatus.innerText = "Message sent!"; adminStatus.style.color = "lightgreen";
               adminMessageInput.value = '';
               setTimeout(() => { closePanelBtn.click(); adminStatus.innerText = ""; }, 2000);
             } else {
-              adminStatus.innerText = "❌ Failed. Check Vercel logs."; adminStatus.style.color = "red";
+              adminStatus.innerText = "Failed. Check Vercel logs."; adminStatus.style.color = "red";
             }
           } catch (err) {
-            adminStatus.innerText = "❌ Network error."; adminStatus.style.color = "red";
+            adminStatus.innerText = "Network error."; adminStatus.style.color = "red";
           }
         };
         adminMessageInput.addEventListener("keypress", (e) => e.key === "Enter" && sendBroadcastBtn.click());
