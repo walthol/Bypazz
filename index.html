@@ -12,11 +12,11 @@
         margin: 0; padding: 0; min-height: 100vh; overflow-x: hidden; overflow-y: auto;
         font-family: 'Roboto Mono', monospace;
         background: linear-gradient(0deg, #1a1a1a, #000);
-        animation: backgroundFade 2s infinite alternate; 
+        animation: backgroundFade 2.5s infinite alternate ease-in-out; 
       }
       @keyframes backgroundFade {
-        0% { background: #1a1a1a; }
-        50% { background: #0d0d0d; }
+        0%, 40% { background: #1a1a1a; }
+        70% { background: #0d0d0d; }
         100% { background: #000; }
       }
       .splash {
@@ -187,7 +187,6 @@
         document.getElementById('onlineChatroomsButton').onclick = () => openGameInNewTab(urls.onlineChatrooms, "JOIN THE BYPAZZ CHAT ROOM! \n\nChannel Name: BYPAZZ \nPassword: bypazz");
         document.getElementById('clickSpeedTest').onclick = () => window.open(urls.clickSpeedTest, '_blank');
         document.getElementById('superMarioBros').onclick = () => openGameInNewTab(urls.superMarioBros, "Credits To https://cim.alwaysdata.net/jeu/");
-
 
         
         const pusher = new Pusher('c4d7ec2739da31e5d600', {
