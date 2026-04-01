@@ -5,18 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bypazz</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet" />
-    <script src="https://js.pusher.com/8.0/pusher.min.js"></script>
     <link rel="icon" type="image/png" href="/icon/bypazzicon.png" />
     <style>
       html, body {
         margin: 0; padding: 0; min-height: 100vh; overflow-x: hidden; overflow-y: auto;
         font-family: 'Roboto Mono', monospace;
         background: linear-gradient(0deg, #1a1a1a, #000);
+        /* 5s duration */
         animation: backgroundFade 5s infinite alternate ease-in-out; 
       }
       @keyframes backgroundFade {
-        0%, 15% { background: #1a1a1a; }
-        90%, 100% { background: #000; }
+        0%, 15% { background: #1a1a1a; }   /* Holds the lighter color for 0.75s (slightly longer) */
+        90%, 100% { background: #000; }    /* Holds the darker color for 0.5s */
       }
       .splash {
         position: fixed; top:0; left:0; width:100vw; height:100vh;
@@ -99,7 +99,7 @@
     </div>
     
     <div class="simple-update" id="updateLogger"> 
-      <strong>•</strong> <strong>Update v64:</strong> Added Scrolling, Super Mario Bros, Update Header, Tab Icon, Adjusted Background Fade <strong>•</strong>
+      <strong>•</strong> <strong>Update v64:</strong> Added Scrolling, Super Mario Bros, Update Header, Tab Icon <strong>•</strong>
     </div>
 
     <center>
@@ -188,18 +188,49 @@
         document.getElementById('superMarioBros').onclick = () => openGameInNewTab(urls.superMarioBros, "Credits To https://cim.alwaysdata.net/jeu/");
 
         
-        const pusher = new Pusher('c4d7ec2739da31e5d600', {
-          cluster: 'us2'
-        });
+        // --- PASTEBIN GLOBAL MESSAGE POLLING ---
+        
+        // 1. Replace this URL with your actual raw Pastebin link
+        const pastebinRawUrl = 'https://pastebin.com/raw/6YUJhi87'; 
+        
+        // 2. Proxied URL to bypass CORS blocks from Pastebin
+        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(pastebinRawUrl)}`;
+        
+        let lastMessage = "";
 
-        const channel = pusher.subscribe('global-channel');
-        channel.bind('new-message', function(data) {
-          const banner = document.getElementById('globalBanner');
-          banner.innerText = data.text;
-          banner.style.display = 'block';
-          setTimeout(() => { banner.style.display = 'none'; banner.innerText = ''; }, 5000);
-        });
+        async function checkForGlobalMessage() {
+            if (pastebinRawUrl === 'YOUR_PASTEBIN_RAW_URL_HERE') return; 
 
+            try {
+                // Fetch the text, preventing the browser from caching an old version
+                const response = await fetch(proxyUrl, { cache: "no-store" });
+                const currentText = await response.text();
+                const trimmedText = currentText.trim();
+
+                // If the message has changed and isn't empty, trigger the banner
+                if (trimmedText !== lastMessage && trimmedText !== "") {
+                    lastMessage = trimmedText;
+                    
+                    const banner = document.getElementById('globalBanner');
+                    banner.innerText = trimmedText;
+                    banner.style.display = 'block';
+                    
+                    // Hide after exactly 10 seconds
+                    setTimeout(() => { 
+                        banner.style.display = 'none'; 
+                    }, 10000);
+                }
+            } catch (error) {
+                console.error("Failed to check global message:", error);
+            }
+        }
+
+        // Check for updates every 15 seconds so we don't hit rate limits
+        setInterval(checkForGlobalMessage, 15000);
+        checkForGlobalMessage(); // Run once immediately on load
+
+
+        // --- ADMIN PANEL (Still here but only works if you have a Vercel backend attached) ---
         
         const ADMIN_PASSWORD = "16502690"; 
 
@@ -251,7 +282,6 @@
           adminStatus.innerText = "Sending..."; adminStatus.style.color = "#aaa";
 
           try {
-            
             const res = await fetch('/api/send-message', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
