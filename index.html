@@ -99,6 +99,7 @@
       <button id="cookieClickerButton" class="game-button">Cookie Clicker</button>
       <button id="driftHuntersButton" class="game-button">Drift Hunters</button>
       <button id="clickSpeedTest" class="game-button">Click Speed Test</button>
+      <button id="clickSpeedTest" class="game-button">Super Mario Bros</button>
     </center>
 
     <button id="adminLockBtn" title="Admin Area">🔒</button>
@@ -143,7 +144,8 @@
           driftHunters: "https://script.google.com/macros/s/AKfycbw8iHPqdVFEzquUYbNxFVAu1Tw4Nri5SWMRLdP_c7a84vCOHVG7YUWuhjSVptg1SVHr/exec",
           windowsEmulator: "https://terminator.aeza.net/en/",
           onlineChatrooms: "https://nodecrypt.runnertagvr.workers.dev/",
-          clickSpeedTest: "https://www.rapidtables.com/tools/click-test.html"
+          clickSpeedTest: "https://www.rapidtables.com/tools/click-test.html",
+          superMarioBros: "https://cim.alwaysdata.net/jeu/mario/index.html"
         };
 
         function openGameInNewTab(url, message="") {
@@ -168,6 +170,7 @@
         document.getElementById('windowsEmulatorButton').onclick = () => openGameInNewTab(urls.windowsEmulator);
         document.getElementById('onlineChatroomsButton').onclick = () => openGameInNewTab(urls.onlineChatrooms, "JOIN THE BYPAZZ CHAT ROOM! \n\nChannel Name: BYPAZZ \nPassword: bypazz");
         document.getElementById('clickSpeedTest').onclick = () => window.open(urls.clickSpeedTest, '_blank');
+        document.getElementById('superMarioBros').onclick = () => openGameInNewTab(urls.superMarioBros, "Credits To https://cim.alwaysdata.net/jeu/");
 
 
         // --- PUSHER: RECEIVE LIVE MESSAGES ---
