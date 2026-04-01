@@ -8,7 +8,7 @@
     <script src="https://js.pusher.com/8.0/pusher.min.js"></script>
     <style>
       html, body {
-        margin: 0; padding: 0; height: 100%; overflow: hidden;
+        margin: 0; padding: 0; min-height: 100vh; overflow-x: hidden; overflow-y: auto;
         font-family: 'Roboto Mono', monospace;
         background: linear-gradient(0deg, #1a1a1a, #000);
         animation: backgroundFade 2s infinite alternate; 
@@ -33,7 +33,7 @@
         font-size: 26px; width: 100%; cursor: pointer; border-radius: 10px;
         margin: 10px 0; max-width: 600px; display: block;
       }
-      center { margin-top: 50px; }
+      center { margin-top: 50px; margin-bottom: 80px; } /* Added bottom margin for scroll clearance */
 
       /* ADMIN & BANNER STYLES */
       #globalBanner {
