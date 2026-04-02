@@ -88,6 +88,19 @@
         margin-bottom: 10px; font-family: 'Roboto Mono', monospace; font-size: 16px;
       }
       .admin-modal .cancel-btn { background-color: transparent; border: 1px solid #555; color: #aaa; }
+      
+      /* NEW: Live Tracker Styling (Bottom Left) */
+      #liveTracker {
+        position: fixed;
+        bottom: 15px;
+        left: 15px;
+        color: #ff0000;
+        font-size: 14px;
+        font-weight: bold;
+        z-index: 9998;
+        text-shadow: 0 0 5px red;
+        pointer-events: none;
+      }
     </style>
   </head>
   <body>
@@ -100,6 +113,10 @@
     
     <div class="simple-update" id="updateLogger"> 
       <strong>•</strong> <strong>Update v64:</strong> Added Scrolling, Super Mario Bros, Update Header, Tab Icon, The Creator Of The Website Can Send Global Messages<strong>•</strong>
+    </div>
+
+    <div id="liveTracker">
+      [ Live Users: <span id="userCount">0</span> ]
     </div>
 
     <center>
@@ -300,6 +317,51 @@
           }
         };
         adminMessageInput.addEventListener("keypress", (e) => e.key === "Enter" && sendBroadcastBtn.click());
+    </script>
+    
+    <script type="module">
+      // 1. Import Firebase modules directly from Google's servers
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+      import { getDatabase, ref, onValue, push, onDisconnect, set } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+
+      // 2. PASTE YOUR EXACT FIREBASE CONFIG HERE:
+      const firebaseConfig = {
+        apiKey: "AIzaSyAk-UfKf45Y9p01Vfkr574_Y45acEbIJzg",
+        authDomain: "bypazz-online-users.firebaseapp.com",
+        databaseURL: "https://bypazz-online-users-default-rtdb.firebaseio.com",
+        projectId: "bypazz-online-users",
+        storageBucket: "bypazz-online-users.firebasestorage.app",
+        messagingSenderId: "154741065924",
+        appId: "1:154741065924:web:49ddd5b319b1a10045e191"
+      };
+
+      // 3. Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+
+      // 4. Presence Tracking Logic
+      const connectionsRef = ref(db, 'connections');
+      const connectedRef = ref(db, '.info/connected');
+
+      // When a user opens the website
+      onValue(connectedRef, (snap) => {
+        if (snap.val() === true) {
+          // Add them to the database
+          const con = push(connectionsRef);
+          
+          // Tell Firebase to automatically remove them when they close the tab
+          onDisconnect(con).remove();
+          
+          // Confirm the connection
+          set(con, true);
+        }
+      });
+
+      // 5. Update the red counter on the screen whenever the number changes
+      onValue(connectionsRef, (snap) => {
+        const count = snap.numChildren();
+        document.getElementById('userCount').innerText = count;
+      });
     </script>
   </body>
 </html>
