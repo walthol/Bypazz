@@ -89,7 +89,7 @@
       }
       .admin-modal .cancel-btn { background-color: transparent; border: 1px solid #555; color: #aaa; }
       
-      /* NEW: Live Tracker Styling (Bottom Left) */
+      /* LIVE TRACKER STYLING - Lowered z-index to 998 so it hides under the splash screen */
       #liveTracker {
         position: fixed;
         bottom: 15px;
@@ -97,7 +97,7 @@
         color: #ff0000;
         font-size: 14px;
         font-family: 'Roboto Mono', monospace;
-        z-index: 9998;
+        z-index: 998; 
         pointer-events: none;
       }
     </style>
@@ -205,61 +205,41 @@
 
         
         // --- PASTEBIN GLOBAL MESSAGE POLLING ---
-        
-        // 1. Replace this URL with your actual raw Pastebin link
         const pastebinRawUrl = 'https://pastebin.com/raw/Jtgt3dS0'; 
-        
-        // 2. Proxied URL to bypass CORS blocks from Pastebin
         const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(pastebinRawUrl)}`;
-        
         let lastMessage = "";
 
         async function checkForGlobalMessage() {
             if (pastebinRawUrl === 'YOUR_PASTEBIN_RAW_URL_HERE') return; 
-
             try {
-                // Fetch the text, preventing the browser from caching an old version
                 const response = await fetch(proxyUrl, { cache: "no-store" });
                 const currentText = await response.text();
                 const trimmedText = currentText.trim();
 
-                // If the message has changed and isn't empty, trigger the banner
                 if (trimmedText !== lastMessage && trimmedText !== "") {
                     lastMessage = trimmedText;
-                    
                     const banner = document.getElementById('globalBanner');
                     banner.innerText = trimmedText;
                     banner.style.display = 'block';
-                    
-                    // Hide after exactly 10 seconds
-                    setTimeout(() => { 
-                        banner.style.display = 'none'; 
-                    }, 10000);
+                    setTimeout(() => { banner.style.display = 'none'; }, 10000);
                 }
             } catch (error) {
                 console.error("Failed to check global message:", error);
             }
         }
-
-        // Check for updates every 15 seconds so we don't hit rate limits
         setInterval(checkForGlobalMessage, 15000);
-        checkForGlobalMessage(); // Run once immediately on load
+        checkForGlobalMessage(); 
 
-
-        // --- ADMIN PANEL (Still here but only works if you have a Vercel backend attached) ---
-        
+        // --- ADMIN PANEL ---
         const ADMIN_PASSWORD = "16502690"; 
-
         const adminLockBtn = document.getElementById('adminLockBtn');
         const adminToggleBtn = document.getElementById('adminToggleBtn');
         const adminOverlay = document.getElementById('adminOverlay');
         const adminPromptDiv = document.getElementById('adminPromptDiv');
         const adminPanelDiv = document.getElementById('adminPanelDiv');
-        
         const adminPasswordInput = document.getElementById('adminPasswordInput');
         const verifyBtn = document.getElementById('verifyBtn');
         const cancelPromptBtn = document.getElementById('cancelPromptBtn');
-        
         const adminMessageInput = document.getElementById('adminMessageInput');
         const sendBroadcastBtn = document.getElementById('sendBroadcastBtn');
         const closePanelBtn = document.getElementById('closePanelBtn');
@@ -269,9 +249,7 @@
           adminOverlay.style.display = 'flex'; adminPromptDiv.style.display = 'block';
           adminPanelDiv.style.display = 'none'; adminPasswordInput.value = ''; adminPasswordInput.focus();
         };
-
         cancelPromptBtn.onclick = () => adminOverlay.style.display = 'none';
-
         verifyBtn.onclick = () => {
           if (adminPasswordInput.value === ADMIN_PASSWORD) {
             adminLockBtn.style.display = 'none'; adminPromptDiv.style.display = 'none';
@@ -280,30 +258,24 @@
             window.location.reload(); 
           }
         };
-
         adminPasswordInput.addEventListener("keypress", (e) => e.key === "Enter" && verifyBtn.click());
-
         closePanelBtn.onclick = () => {
           adminOverlay.style.display = 'none'; adminToggleBtn.style.display = 'block';
         };
-
         adminToggleBtn.onclick = () => {
           adminOverlay.style.display = 'flex'; adminPanelDiv.style.display = 'block';
           adminPromptDiv.style.display = 'none'; adminMessageInput.focus();
         };
-
         sendBroadcastBtn.onclick = async () => {
           const text = adminMessageInput.value;
           if (!text) return;
           adminStatus.innerText = "Sending..."; adminStatus.style.color = "#aaa";
-
           try {
             const res = await fetch('/api/send-message', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ text: text, secretPassword: adminPasswordInput.value })
             });
-
             if (res.ok) {
               adminStatus.innerText = "Message sent!"; adminStatus.style.color = "lightgreen";
               adminMessageInput.value = '';
@@ -319,11 +291,10 @@
     </script>
     
     <script type="module">
-      // 1. Import Firebase modules directly from Google's servers
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
       import { getDatabase, ref, onValue, push, onDisconnect, set } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
 
-      // 2. PASTE YOUR EXACT FIREBASE CONFIG HERE:
+      // ⚠️ REMEMBER TO PASTE YOUR ACTUAL FIREBASE CONFIG HERE ⚠️
       const firebaseConfig = {
         apiKey: "AIzaSyAk-UfKf45Y9p01Vfkr574_Y45acEbIJzg",
         authDomain: "bypazz-online-users.firebaseapp.com",
@@ -334,29 +305,21 @@
         appId: "1:154741065924:web:49ddd5b319b1a10045e191"
       };
 
-      // 3. Initialize Firebase
       const app = initializeApp(firebaseConfig);
       const db = getDatabase(app);
 
-      // 4. Presence Tracking Logic
       const connectionsRef = ref(db, 'connections');
       const connectedRef = ref(db, '.info/connected');
 
-      // When a user opens the website
       onValue(connectedRef, (snap) => {
         if (snap.val() === true) {
-          // Add them to the database
           const con = push(connectionsRef);
-          
-          // Tell Firebase to automatically remove them when they close the tab
           onDisconnect(con).remove();
-          
-          // Confirm the connection
           set(con, true);
         }
       });
 
-      // 5. Update the red counter on the screen whenever the number changes
+      // Update the red counter on the screen
       onValue(connectionsRef, (snap) => {
         const count = snap.numChildren();
         document.getElementById('userCount').innerText = count;
