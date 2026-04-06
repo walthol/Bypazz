@@ -111,7 +111,7 @@
     </div>
     
     <div class="simple-update" id="updateLogger"> 
-      <strong>•</strong> <strong>Update v64:</strong> Added Scrolling, Super Mario Bros, Update Header, Tab Icon, Live Users Display<strong> •</strong>
+      <strong>•</strong> <strong>Update v65:</strong> Added More Games<strong> •</strong>
     </div>
 
     <div id="liveTracker">
@@ -133,6 +133,21 @@
       <button id="clickSpeedTest" class="game-button">Click Speed Test</button>
       <button id="superMarioBros" class="game-button">Super Mario Bros</button>
       <button id="twentyFourtyEight" class="game-button">2048</button>
+      <button id="onevOneLol" class="game-button">1v1 Lol</button>
+      <button id="amongUs" class="game-button">Among Us</button>
+      <button id="baldisBasics" class="game-button">Baldis Basics</button>
+      <button id="ballSort" class="game-button">Ball Sort</button>
+      <button id="bitLife" class="game-button">Bit Life</button>
+      <button id="chromeDino" class="game-button">Chrome Dino</button>
+      <button id="driftBoss" class="game-button">Drift Boss</button>
+      <button id="flappyBird" class="game-button">Flappy Bird</button>
+      <button id="geometryDash" class="game-button">Geometry Dash Lite</button>
+      <button id="geometryDashSubzero" class="game-button">Geometry Dash Subzero</button>
+      <button id="googleSnake" class="game-button">Google Snake</button>
+      <button id="minecraftWeb" class="game-button">Minecraft</button>
+      <button id="slopeOne" class="game-button">Slope</button>
+      <button id="stackGame" class="game-button">Stack</button>
+      <button id="fiveNights" class="game-button">FNAF</button>
     </center>
 
     <button id="adminLockBtn" title="Admin Area">🔒</button>
@@ -178,7 +193,22 @@
           onlineChatrooms: "https://nodecrypt.runnertagvr.workers.dev/",
           clickSpeedTest: "https://www.rapidtables.com/tools/click-test.html",
           superMarioBros: "https://cim.alwaysdata.net/jeu/mario/index.html",
-          twentyFourtyEight: "https://games-site-github-io-gilt.vercel.app/projects/2048/index.html"
+          twentyFourtyEight: "https://games-site-github-io-gilt.vercel.app/projects/2048/index.html",
+          onevOneLol: "https://games-site-github-io-gilt.vercel.app/projects/1v1.lol/index.html",
+          amongUs: "https://games-site-github-io-gilt.vercel.app/projects/among-us/index.html",
+          baldisBasics: "https://games-site-github-io-gilt.vercel.app/projects/baldis-basics/index.html",
+          ballSort: "https://games-site-github-io-gilt.vercel.app/projects/ball-sort-puzzle/index.html",
+          bitLife: "https://games-site-github-io-gilt.vercel.app/projects/bitlife/index.html",
+          chromeDino: "https://games-site-github-io-gilt.vercel.app/projects/chrome-dino/index.html",
+          driftBoss: "https://games-site-github-io-gilt.vercel.app/projects/drift-boss/index.html",
+          flappyBird: "https://games-site-github-io-gilt.vercel.app/projects/flappy-bird/index.html",
+          geometryDash: "https://games-site-github-io-gilt.vercel.app/projects/geodash/index.html",
+          geometryDashSubzero: "https://games-site-github-io-gilt.vercel.app/projects/geodash-subzero/index.html",
+          googleSnake: "https://games-site-github-io-gilt.vercel.app/projects/google-snake/index.html",
+          minecraftWeb: "https://games-site-github-io-gilt.vercel.app/projects/minecraft/index.html",
+          slopeOne: "https://games-site-github-io-gilt.vercel.app/projects/slope/index.html",
+          stackGame: "https://games-site-github-io-gilt.vercel.app/projects/stack/index.html",
+          fiveNights: "https://games-site-github-io-gilt.vercel.app/projects/fnaf-1/index.html"
         };
 
         function openGameInNewTab(url, message="") {
@@ -205,6 +235,21 @@
         document.getElementById('clickSpeedTest').onclick = () => window.open(urls.clickSpeedTest, '_blank');
         document.getElementById('superMarioBros').onclick = () => openGameInNewTab(urls.superMarioBros, "Credits To C.I.M.");
         document.getElementById('twentyFourtyEight').onclick = () => openGameInNewTab(urls.twentyFourtyEight);
+        document.getElementById('onevOneLol').onclick = () => openGameInNewTab(urls.onevOneLol);
+        document.getElementById('amongUs').onclick = () => openGameInNewTab(urls.amongUs);
+        document.getElementById('baldisBasics').onclick = () => openGameInNewTab(urls.baldisBasics);
+        document.getElementById('ballSort').onclick = () => openGameInNewTab(urls.ballSort);
+        document.getElementById('bitLife').onclick = () => openGameInNewTab(urls.bitLife);
+        document.getElementById('chromeDino').onclick = () => openGameInNewTab(urls.chromeDino, "Press The Dino With Your Finger (Using Touchscreen) If It Doesnt Work With Your Mouse To Start!");
+        document.getElementById('driftBoss').onclick = () => openGameInNewTab(urls.driftBoss);
+        document.getElementById('flappyBird').onclick = () => openGameInNewTab(urls.flappyBird);
+        document.getElementById('geometryDash').onclick = () => openGameInNewTab(urls.geometryDash);
+        document.getElementById('geometryDashSubzero').onclick = () => openGameInNewTab(urls.geometryDashSubzero);
+        document.getElementById('googleSnake').onclick = () => openGameInNewTab(urls.googleSnake);
+        document.getElementById('minecraftWeb').onclick = () => openGameInNewTab(urls.minecraftWeb);
+        document.getElementById('slopeOne').onclick = () => openGameInNewTab(urls.slopeOne);
+        document.getElementById('stackGame').onclick = () => openGameInNewTab(urls.stackGame);
+        document.getElementById('fiveNights').onclick = () => openGameInNewTab(urls.fiveNights);
 
         
         // --- PASTEBIN GLOBAL MESSAGE POLLING ---
