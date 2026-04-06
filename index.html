@@ -11,12 +11,12 @@
         margin: 0; padding: 0; min-height: 100vh; overflow-x: hidden; overflow-y: auto;
         font-family: 'Roboto Mono', monospace;
         background: linear-gradient(0deg, #1a1a1a, #000);
-        /* 5s duration */
+        /* edit background fade time if i want */
         animation: backgroundFade 5s infinite alternate ease-in-out; 
       }
       @keyframes backgroundFade {
-        0%, 15% { background: #1a1a1a; }   /* Holds the lighter color for 0.75s (slightly longer) */
-        90%, 100% { background: #000; }    /* Holds the darker color for 0.5s */
+        0%, 15% { background: #1a1a1a; }   /* light color for .75 sec */
+        90%, 100% { background: #000; }    /* dark color fade for .5 sec */
       }
       .splash {
         position: fixed; top:0; left:0; width:100vw; height:100vh;
@@ -89,7 +89,6 @@
       }
       .admin-modal .cancel-btn { background-color: transparent; border: 1px solid #555; color: #aaa; }
       
-      /* LIVE TRACKER STYLING - Lowered z-index to 998 so it hides under the splash screen */
       #liveTracker {
         position: fixed;
         bottom: 15px;
@@ -252,7 +251,6 @@
         document.getElementById('fiveNights').onclick = () => openGameInNewTab(urls.fiveNights);
 
         
-        // --- PASTEBIN GLOBAL MESSAGE POLLING ---
         const pastebinRawUrl = 'https://pastebin.com/raw/Jtgt3dS0'; 
         const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(pastebinRawUrl)}`;
         let lastMessage = "";
@@ -278,7 +276,7 @@
         setInterval(checkForGlobalMessage, 15000);
         checkForGlobalMessage(); 
 
-        // --- ADMIN PANEL ---
+        // --- admin panel, delete later ---
         const ADMIN_PASSWORD = "16502690"; 
         const adminLockBtn = document.getElementById('adminLockBtn');
         const adminToggleBtn = document.getElementById('adminToggleBtn');
@@ -342,7 +340,7 @@
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
       import { getDatabase, ref, onValue, push, onDisconnect, set } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
 
-      // ⚠️ REMEMBER TO PASTE YOUR ACTUAL FIREBASE CONFIG HERE ⚠️
+      // FIREBASE CONFIG
       const firebaseConfig = {
         apiKey: "AIzaSyAk-UfKf45Y9p01Vfkr574_Y45acEbIJzg",
         authDomain: "bypazz-online-users.firebaseapp.com",
@@ -366,8 +364,7 @@
           set(con, true);
         }
       });
-
-      // Update the red counter on the screen
+      
       onValue(connectionsRef, (snap) => {
         const count = snap.numChildren();
         document.getElementById('userCount').innerText = count;
