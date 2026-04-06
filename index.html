@@ -132,7 +132,7 @@
       <button id="driftHuntersButton" class="game-button">Drift Hunters</button>
       <button id="clickSpeedTest" class="game-button">Click Speed Test</button>
       <button id="superMarioBros" class="game-button">Super Mario Bros</button>
-      <button id="2048" class="game-button">2048</button>
+      <button id="twentyFourtyEight" class="game-button">2048</button>
     </center>
 
     <button id="adminLockBtn" title="Admin Area">🔒</button>
@@ -177,8 +177,8 @@
           windowsEmulator: "https://terminator.aeza.net/en/",
           onlineChatrooms: "https://nodecrypt.runnertagvr.workers.dev/",
           clickSpeedTest: "https://www.rapidtables.com/tools/click-test.html",
-          superMarioBros: "https://cim.alwaysdata.net/jeu/mario/index.html"
-          2048: "https://games-site-github-io-gilt.vercel.app/projects/2048/index.html"
+          superMarioBros: "https://cim.alwaysdata.net/jeu/mario/index.html",
+          twentyFourtyEight: "https://games-site-github-io-gilt.vercel.app/projects/2048/index.html"
         };
 
         function openGameInNewTab(url, message="") {
@@ -204,7 +204,7 @@
         document.getElementById('onlineChatroomsButton').onclick = () => openGameInNewTab(urls.onlineChatrooms, "JOIN THE BYPAZZ CHAT ROOM! \n\nChannel Name: BYPAZZ \nPassword: bypazz");
         document.getElementById('clickSpeedTest').onclick = () => window.open(urls.clickSpeedTest, '_blank');
         document.getElementById('superMarioBros').onclick = () => openGameInNewTab(urls.superMarioBros, "Credits To C.I.M.");
-        document.getElementById('2048').onclick = () => openGameInNewTab(urls.2048);
+        document.getElementById('twentyFourtyEightButton').onclick = () => openGameInNewTab(urls.twentyFourtyEight);
 
         
         // --- PASTEBIN GLOBAL MESSAGE POLLING ---
