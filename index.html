@@ -148,6 +148,7 @@
       <button id="stackGame" class="game-button">Stack</button>
       <button id="fiveNights" class="game-button">FNAF</button>
       <button id="templeRun" class="game-button">Temple Run</button>
+      <button id="tunnleRush" class="game-button">Tunnel Rush</button>
     </center>
     
     <button id="adminToggleBtn">Open Panel</button>
@@ -208,7 +209,8 @@
           slopeOne: "https://games-site-github-io-gilt.vercel.app/projects/slope/index.html",
           stackGame: "https://games-site-github-io-gilt.vercel.app/projects/stack/index.html",
           fiveNights: "https://games-site-github-io-gilt.vercel.app/projects/fnaf-2/index.html",
-          templeRun: "https://juegosgratispuntocom.github.io/games/html5/temple-run-2/index.html"
+          templeRun: "https://juegosgratispuntocom.github.io/games/html5/temple-run-2/index.html",
+          tunnelRush: "https://juegosgratispuntocom.github.io/games/html5/tunnel-rush/index.html"
         };
 
         function openGameInNewTab(url, message="") {
@@ -251,6 +253,7 @@
         document.getElementById('stackGame').onclick = () => openGameInNewTab(urls.stackGame);
         document.getElementById('fiveNights').onclick = () => openGameInNewTab(urls.fiveNights);
         document.getElementById('templeRun').onclick = () => openGameInNewTab(urls.templeRun);
+        document.getElementById('tunnelRush').onclick = () => openGameInNewTab(urls.tunnelRush);
 
         
         const pastebinRawUrl = 'https://pastebin.com/raw/Jtgt3dS0'; 
@@ -342,7 +345,7 @@
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
       import { getDatabase, ref, onValue, push, onDisconnect, set } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
 
-      // FIREBASE CONFIG
+      // FIREBASE CONFIG STUFF
       const firebaseConfig = {
         apiKey: "AIzaSyAk-UfKf45Y9p01Vfkr574_Y45acEbIJzg",
         authDomain: "bypazz-online-users.firebaseapp.com",
